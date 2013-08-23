@@ -285,3 +285,19 @@ test('loading a serialised index', function () {
   deepEqual(idx._fields, serialisedData.fields)
   equal(idx._ref, 'id')
 })
+
+test('using a plugin', function () {
+  var idx = new lunr.Index,
+      ctx, args,
+      plugin = function () {
+        ctx = this
+        args = Array.prototype.slice.call(arguments)
+        this.pluginLoaded = true
+      }
+
+  idx.use(plugin, 'foo', 'bar')
+
+  equal(ctx, idx)
+  deepEqual(args, [idx, 'foo', 'bar'])
+  ok(idx.pluginLoaded)
+})
